@@ -9,3 +9,6 @@ output.xml
 report.html
 __pycache__
 node_modules
+output
+
+.DS_Store
