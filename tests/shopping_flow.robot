@@ -2,6 +2,7 @@
 Documentation    Test the purchase flow functionality at saucedemo.com.
 Library    Browser
 Library    Collections
+Library    OperatingSystem
 Library    ../resources/SauceUtils.py
 Resource    ../resources/common.resource
 Resource    ../resources/pages/login_page.resource
@@ -23,10 +24,10 @@ ${first_name}    foo
 ${last_name}    bar
 ${zip_code}    12345
 
-
 *** Test Cases ***
 User Can Complete A Purchase
-    Login    standard_user    ${USERS}[standard_user]
+    ${user}=    Get Environment Variable    SHOPPING_CART_USER    default=standard_user
+    Login    ${user}    ${USERS}[${user}]
     ${items}=    Pick Two Random Items
     FOR    ${item}    IN    @{items}
         Add Product To Cart    ${item}
