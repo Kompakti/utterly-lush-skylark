@@ -1,5 +1,6 @@
 *** Settings ***
 Library    Browser
+Library    Collections
 
 
 *** Variables ***
@@ -30,22 +31,27 @@ Get Checkout Item Count
     RETURN    ${count}
 
 Get Checkout Item Names
-    ${names}=    Get Text    ${ITEM_NAME}    All
+    ${elements}=    Get Elements    ${ITEM_NAME}
+    ${names}=    Create List
+    FOR    ${element}    IN    @{elements}
+        ${name}=    Get Text    ${element}
+        Append To List    ${names}    ${name}
+    END
     RETURN    ${names}
 
-Get Item Quantity
+Get Checkout Item Quantity
     [Arguments]    ${product_name}
     ${item}=    Get Checkout Item Locator    ${product_name}
     ${quantity}=    Get Text    ${item} >> ${ITEM_QUANTITY}
     RETURN    ${quantity}
 
-Get Item Price
+Get Checkout Item Price
     [Arguments]    ${product_name}
     ${item}=    Get Checkout Item Locator    ${product_name}
     ${price}=    Get Text    ${item} >> ${ITEM_PRICE}
     RETURN    ${price}
 
-Get Item Description
+Get Checkout Item Description
     [Arguments]    ${product_name}
     ${item}=    Get Checkout Item Locator    ${product_name}
     ${description}=    Get Text    ${item} >> ${ITEM_DESCRIPTION}

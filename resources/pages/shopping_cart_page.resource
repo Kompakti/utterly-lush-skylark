@@ -1,5 +1,6 @@
 *** Settings ***
 Library    Browser
+Library    Collections
 
 
 *** Variables ***
@@ -25,7 +26,12 @@ Get Cart Item Count
     RETURN    ${count}
 
 Get Cart Item Names
-    ${names}=    Get Text    ${ITEM_NAME}    All
+    ${elements}=    Get Elements    ${ITEM_NAME}
+    ${names}=    Create List
+    FOR    ${element}    IN    @{elements}
+        ${name}=    Get Text    ${element}
+        Append To List    ${names}    ${name}
+    END
     RETURN    ${names}
 
 Get Cart Badge Count
@@ -37,28 +43,23 @@ Get Cart Badge Count
     ${badge_text}=    Get Text    ${CART_BADGE}
     RETURN    ${badge_text}
 
-Get Item Quantity
+Get Cart Item Quantity
     [Arguments]    ${product_name}
     ${item}=    Get Cart Item Locator    ${product_name}
     ${quantity}=    Get Text    ${item} >> ${ITEM_QUANTITY}
     RETURN    ${quantity}
 
-Get Item Price
+Get Cart Item Price
     [Arguments]    ${product_name}
     ${item}=    Get Cart Item Locator    ${product_name}
     ${price}=    Get Text    ${item} >> ${ITEM_PRICE}
     RETURN    ${price}
 
-Get Item Description
+Get Cart Item Description
     [Arguments]    ${product_name}
     ${item}=    Get Cart Item Locator    ${product_name}
     ${description}=    Get Text    ${item} >> ${ITEM_DESCRIPTION}
     RETURN    ${description}
-
-Cart Should Contain
-    [Arguments]    ${product_name}
-    ${item}=    Get Cart Item Locator    ${product_name}
-    Get Element States    ${item}    contains    visible
 
 Checkout
     Click    ${CHECKOUT_BUTTON}

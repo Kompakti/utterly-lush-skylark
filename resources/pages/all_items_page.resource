@@ -1,5 +1,6 @@
 *** Settings ***
 Library    Browser
+Library    Collections
 
 
 *** Variables ***
@@ -28,7 +29,12 @@ Open Shopping Cart
 
 Get Product Names
     [Documentation]    Returns the list of product names currently displayed.
-    ${names}=    Get Text    ${ITEM_NAME}    All
+    ${elements}=    Get Elements    ${ITEM_NAME}
+    ${names}=    Create List
+    FOR    ${element}    IN    @{elements}
+        ${name}=    Get Text    ${element}
+        Append To List    ${names}    ${name}
+    END
     RETURN    ${names}
 
 Get Product Locator

@@ -36,7 +36,6 @@ Generate PDF Order And Verify Download
     ...    Only checks that the download happened - PDF content verification is out of scope for now.
     ${promise}=    Promise To Wait For Download
     Click Generate PDF Order
-    @{downloads}=    Wait For All Promises
-    ${download}=    Set Variable    ${downloads}[0]
+    ${download}=    Wait For    ${promise}
     File Should Exist    ${download}[saveAs]
     RETURN    ${download}[saveAs]
